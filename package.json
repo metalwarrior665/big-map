@@ -1,0 +1,20 @@
+{
+  "name": "big-map-simple",
+  "version": "1.0.0",
+  "description": "Workaround Map for maps larger than 14M elements",
+  "main": "main.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "map",
+    "no limit"
+  ],
+  "author": "Lukas Krivka",
+  "license": "ISC",
+  "dependencies": {},
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/metalwarrior665/big-map.git"
+  }
+}
