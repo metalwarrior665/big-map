@@ -48,7 +48,7 @@ insert(map, 1)
 
 // Try to switch the values
 const map2 = new BigMap();
-insert(map2, 1, true)
+insert(map2, 5, true)
 
 // This may crash depending on your available memory
 // insert(map, 50) 

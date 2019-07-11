@@ -40,9 +40,12 @@ class BigMap {
     entries() {
         let total = [];
         for (const map of this._maps) {
-            const arr = Array.from(map.entries());
-            total = total.concat(arr);
+            for (const entry of map) {
+                total.push(entry);
+            }
+           
         }
+        console.log('total[0]:', total[0]);
         return total;
     }
 }
