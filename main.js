@@ -1,31 +1,46 @@
 class BigMap {
+    /**
+     * @param {Iterable<any>} [iterable]
+     */
     constructor(iterable) {
-        if (iterable) throw new Error("haven't implemented construction with iterable yet");
         this._maps = [new Map()];
         this._perMapSizeLimit = 14000000;
-        this.size = 0;
-    }
 
+        if (iterable) {
+            for (const key in iterable) {
+                this.set(key, iterable[key]);
+            }
+        }
+    }
+    /**
+     * @param {string} key
+     */
     has(key) {
-        for (const map of this._maps) {
+        for (let map of this._maps) {
             if (map.has(key)) {
                 return true;
             }
         }
         return false;
     }
-
+    /**
+     * @param {string} key
+     * @returns {any | undefined}
+     */
     get(key) {
-        for (const map of this._maps) {
+        for (let map of this._maps) {
             if (map.has(key)) {
                 return map.get(key);
             }
         }
         return undefined;
     }
-
+    /**
+     * @param {string} key
+     * @returns {this}
+     */
     set(key, value) {
-        for (const map of this._maps) {
+        for (let map of this._maps) {
             if (map.has(key)) {
                 map.set(key, value);
                 return this;
@@ -37,32 +52,42 @@ class BigMap {
             this._maps.push(map);
         }
         map.set(key, value);
-        this.size++;
         return this;
     }
-
-    entries() {
-        let totalEntries = [];
-        for (const map of this._maps) {
-            totalEntries = totalEntries.concat(map.entries());
-        }
-        return totalEntries;
+    clear() {
+        this._maps.forEach((m) => m.clear());
+        this._maps.length = 1;
     }
-
-    keys() {
-        let totalKeys = [];
-        for (const map of this._maps) {
-            totalKeys = totalKeys.concat(map.keys());
-        }
-        return totalKeys;
+    /**
+     * @returns {number}
+     */
+    get size() {
+        return this._maps.reduce((o, map) => (o + map.size), 0);
     }
-
+    /**
+     * @private
+     * @param {Exclude<keyof Map<any, any>, 'number'>} type
+     */
+    _reduceSpread(type) {
+        return this._maps.reduce((out, map) => out.concat([...map[type]()]), []);
+    }
+    /**
+     * @returns {any[]}
+     */
     values() {
-        let totalValues = [];
-        for (const map of this._maps) {
-            totalValues = totalValues.concat(map.values());
-        }
-        return totalValues;
+        return this._reduceSpread('values');
+    }
+    /**
+     * @returns {string[]}
+     */
+    keys() {
+        return this._reduceSpread('keys');
+    }
+    /**
+     * @returns {Array<[string, any]>}
+     */
+    entries() {
+        return this._reduceSpread('entries');
     }
 }
 
