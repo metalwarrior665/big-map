@@ -4,7 +4,7 @@
   "description": "Workaround Map for maps larger than 14M elements",
   "main": "main.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "node --max_old_space_size=8192 test.js"
   },
   "keywords": [
     "map",

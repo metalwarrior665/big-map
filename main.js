@@ -1,10 +1,20 @@
 class BigMap {
+    /**
+     * @param {Iterable<any>} [iterable]
+     */
     constructor(iterable) {
-        if (iterable) throw new Error("haven't implemented construction with iterable yet");
         this._maps = [new Map()];
         this._perMapSizeLimit = 14000000;
-        this.size = 0;
+
+        if (iterable) {
+            for (const key in iterable) {
+                this.set(key, iterable[key]);
+            }
+        }
     }
+    /**
+     * @param {string} key
+     */
     has(key) {
         for (let map of this._maps) {
             if (map.has(key)) {
@@ -13,6 +23,10 @@ class BigMap {
         }
         return false;
     }
+    /**
+     * @param {string} key
+     * @returns {any | undefined}
+     */
     get(key) {
         for (let map of this._maps) {
             if (map.has(key)) {
@@ -21,6 +35,10 @@ class BigMap {
         }
         return undefined;
     }
+    /**
+     * @param {string} key
+     * @returns {this}
+     */
     set(key, value) {
         for (let map of this._maps) {
             if (map.has(key)) {
@@ -34,19 +52,42 @@ class BigMap {
             this._maps.push(map);
         }
         map.set(key, value);
-        this.size++;
         return this;
     }
+    clear() {
+        this._maps.forEach((m) => m.clear());
+        this._maps.length = 1;
+    }
+    /**
+     * @returns {number}
+     */
+    get size() {
+        return this._maps.reduce((o, map) => (o + map.size), 0);
+    }
+    /**
+     * @private
+     * @param {Exclude<keyof Map<any, any>, 'number'>} type
+     */
+    _reduceSpread(type) {
+        return this._maps.reduce((out, map) => out.concat([...map[type]()]), []);
+    }
+    /**
+     * @returns {any[]}
+     */
+    values() {
+        return this._reduceSpread('values');
+    }
+    /**
+     * @returns {string[]}
+     */
+    keys() {
+        return this._reduceSpread('keys');
+    }
+    /**
+     * @returns {Array<[string, any]>}
+     */
     entries() {
-        let total = [];
-        for (const map of this._maps) {
-            for (const entry of map) {
-                total.push(entry);
-            }
-           
-        }
-        console.log('total[0]:', total[0]);
-        return total;
+        return this._reduceSpread('entries');
     }
 }
 
