@@ -1,6 +1,6 @@
 {
   "name": "big-map-simple",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Workaround Map for maps larger than 14M elements",
   "main": "main.js",
   "scripts": {
